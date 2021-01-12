@@ -25,6 +25,16 @@ nav ul li a:hover {
   color: #171717;
 }
 
+.auth-form {
+  padding: 20px;
+}
+
+.auth-box {
+  margin-top: 120px;
+  border: 1px solid var(--cardBorder);
+  background-color: var(--cardBackground);
+}
+
 .container {
   padding-top: 20px;
 }
