@@ -3,10 +3,6 @@ const app = new Vue({
   data: {
     baseUrl: 'http://localhost:3000',
     tasks: [],
-    backlogTasks: [],
-    toDoTasks: [],
-    doneTasks: [],
-    completedTasks: [],
     emailLogin: '',
     passwordLogin: '',
     emailRegister: '',
@@ -116,21 +112,6 @@ const app = new Vue({
         })
         .then(data => {
           this.tasks = []
-          this.backlogTasks = []
-          this.toDoTasks = []
-          this.completedTasks = []
-          this.doneTasks = []
-          data.forEach(el => {
-            if(el.category === 'Backlog'){
-              this.backlogTasks.push(el)
-            }else if(el.category === 'ToDo'){
-              this.toDoTasks.push(el)
-            }else if(el.category === 'Completed'){
-              this.completedTasks.push(el)
-            }else if(el.category === 'Done'){
-              this.doneTasks.push(el)
-            }
-          })
           this.tasks = data
         })
         .catch(err => {
@@ -165,5 +146,19 @@ const app = new Vue({
   },
   created(){
     this.checkAuth()
+  },
+  computed:{
+    backlogTasks(){
+      return this.tasks.filter(task => task.category === 'Backlog')
+    },
+    toDoTasks(){
+      return this.tasks.filter(task => task.category === 'ToDo')
+    },
+    completedTasks(){
+      return this.tasks.filter(task => task.category === 'Completed')
+    },
+    doneTasks(){
+      return this.tasks.filter(task => task.category === 'Done')
+    }
   }
 })
