@@ -10,6 +10,7 @@
 </head>
 <body>
   <div id="app">
+
     <nav class="navigation">
       <ul>
         <li><a href="#">Kanban</a></li>
@@ -19,6 +20,11 @@
     </nav>
     <section id="main" v-if="mainShow === true">
       <div class="container">
+        <div class="row mb-3">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTaskModal">
+            Add New Task
+          </button>
+        </div>
         <div class="row">
           <div class="col task-container backlog">
             <h4>📚 Backlog</h4>
@@ -140,6 +146,42 @@
         </div>
       </div>
     </section>
+    <!-- Modal -->
+    <div class="modal fade" id="addTaskModal" tabindex="-1" role="dialog" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addTaskModalLabel">Add new task</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST" v-on:submit.prevent="addNewTask">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="title">Title:</label><br>
+                <input type="text" name="title" v-model="addNewTitle" id="edit-title" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="category">Category:</label><br>
+                <!-- <input type="text" name="category" id="edit-category" class="form-control"> -->
+                <select v-model="addNewCategory" class="custom-select">
+                  <option value="Backlog">Backlog</option>
+                  <option value="ToDo">ToDo</option>
+                  <option value="Done">Done</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Add Task</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

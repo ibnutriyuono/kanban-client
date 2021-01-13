@@ -1,7 +1,7 @@
-const baseUrl = `http://localhost:3000`
 const app = new Vue({
   el: '#app',
   data: {
+    baseUrl: 'http://localhost:3000',
     tasks: [],
     backlogTasks: [],
     toDoTasks: [],
@@ -17,7 +17,9 @@ const app = new Vue({
     mainShow: true,
     loggedEmail: '',
     registerFormShow: false,
-    loginFormShow: true
+    loginFormShow: true,
+    addNewTitle: '',
+    addNewCategory: ''
   },
   methods:{
     handleLogin(){
@@ -25,7 +27,7 @@ const app = new Vue({
       let password = this.passwordLogin
       axios({
         method: 'POST',
-        url: `${baseUrl}/login`,
+        url: `${this.baseUrl}/login`,
         data:{
           email,
           password
@@ -55,7 +57,7 @@ const app = new Vue({
       let last_name = this.lastNameRegister
       axios({
         method: 'POST',
-        url: `${baseUrl}/register`,
+        url: `${this.baseUrl}/register`,
         data:{
           email,
           password,
@@ -104,7 +106,7 @@ const app = new Vue({
     getTasks(){
       axios({
         method: 'GET',
-        url: `${baseUrl}/tasks`,
+        url: `${this.baseUrl}/tasks`,
         headers:{
           access_token: localStorage.getItem('access_token')
         }
@@ -133,6 +135,31 @@ const app = new Vue({
         })
         .catch(err => {
           console.log(err.response)
+        })
+    },
+    addNewTask(){
+      $('#addTaskModal').modal('toggle')
+      let title = this.addNewTitle
+      let category = this.addNewCategory
+      axios({
+        url: `${this.baseUrl}/tasks`,
+        method: 'POST',
+        headers:{
+          access_token: localStorage.getItem('access_token')
+        },
+        data:{
+          title,
+          category
+        }
+      })
+        .then(res => {
+          return res.data
+        })
+        .then(res => {
+          this.checkAuth()
+        })
+        .catch(err => {
+          console.log(err)
         })
     }
   },
