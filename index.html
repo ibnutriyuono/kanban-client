@@ -9,110 +9,126 @@
   <title>Kanban Tempate</title> 
 </head>
 <body>
-  <nav class="navigation">
-    <ul>
-       <li><a href="#">Kanban</a></li>
-       <li><a href="#">ibnutriyuono@gmail.com</a></li>
-    </ul> 
-  </nav>
-  <div class="container">
-    <div class="row">
-      <div class="col task-container backlog">
-        <h4>📚 Backlog</h4>
-        <div class="card mt-3" style="width: 15rem;">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <div class="card-text">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non ea quia nihil, voluptatibus eum officiis unde inventore ducimus mollitia exercitationem!</p>
+  <div id="app">
+    <nav class="navigation">
+      <ul>
+        <li><a href="#">Kanban</a></li>
+        <li><a href="#" v-if="mainShow === true">{{ loggedEmail }}</a></li>
+        <li><a href="#" @click.prevent="handleLogout" v-if="mainShow === true">Logout</a></li>
+      </ul> 
+    </nav>
+    <section id="main" v-if="mainShow === true">
+      <div class="container">
+        <div class="row">
+          <div class="col task-container backlog">
+            <h4>📚 Backlog</h4>
+            <div class="card mt-3" style="width: 15rem;">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <div class="card-text">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non ea quia nihil, voluptatibus eum officiis unde inventore ducimus mollitia exercitationem!</p>
+                </div>
+                <a href="#" class="btn btn-primary" >Show Details</a> 
+              </div>
             </div>
-            <a href="#" class="btn btn-primary" >Show Details</a> 
+          </div>
+          <div class="col task-container todo">
+            <h4>💻 To Do</h4>
+            <div class="card mt-3" style="width: 15rem;">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <div class="card-text">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non ea quia nihil, voluptatibus eum officiis unde inventore ducimus mollitia exercitationem!</p>
+                </div>
+                <a href="#" class="btn btn-primary" >Show Details</a> 
+              </div>
+            </div>
+          </div>
+          <div class="col task-container done">
+            <h4>🖋️ Done</h4>
+            <div class="card mt-3" style="width: 15rem;">
+              <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <div class="card-text">
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non ea quia nihil, voluptatibus eum officiis unde inventore ducimus mollitia exercitationem!</p>
+                </div>
+                <a href="#" class="btn btn-primary" >Show Details</a> 
+              </div>
+            </div>
+          </div>
+          <div class="col task-container completed">
+            <h4>🚀 Completed</h4>
           </div>
         </div>
       </div>
-      <div class="col task-container todo">
-        <h4>💻 To Do</h4>
-        <div class="card mt-3" style="width: 15rem;">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <div class="card-text">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non ea quia nihil, voluptatibus eum officiis unde inventore ducimus mollitia exercitationem!</p>
+    </section>
+    <section id="auth" v-if="authShow === true">
+      <div id="login-container" v-if="loginFormShow === true">
+        <div class="container">
+          <div class="row justify-content-center align-items-center">
+            <div class="col-md-6 auth-box">
+              <form id="login-form" class="form auth-form" v-on:submit.prevent="handleLogin">
+                <h3 class="text-center text-info">Login</h3>
+                <div class="form-group">
+                  <label for="email" class="text-info">Email:</label><br>
+                  <input type="text" v-model="emailLogin"  name="email" id="email" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="password" class="text-info">Password:</label><br>
+                  <input type="password" v-model="passwordLogin" name="password" id="password" class="form-control">
+                </div>
+                <div class="text-right">
+                  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                  <button type="submit" class="btn btn-primary" id="login-btn">Login</button>
+                </div>
+              </form>
             </div>
-            <a href="#" class="btn btn-primary" >Show Details</a> 
+          </div>
+          <div id="register-link" class="text-center mt-3">
+            <a href="#" @click="showRegisterForm">Register here</a>
           </div>
         </div>
       </div>
-      <div class="col task-container done">
-        <h4>🖋️ Done</h4>
-        <div class="card mt-3" style="width: 15rem;">
-          <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <div class="card-text">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non ea quia nihil, voluptatibus eum officiis unde inventore ducimus mollitia exercitationem!</p>
+      <div id="register-container" v-if="registerFormShow === true">
+        <div class="container">
+          <div class="row justify-content-center align-items-center">
+            <div class="col-md-6 auth-box">
+              <form id="register-form" class="form auth-form" method="post" v-on:submit.prevent="handleRegister">
+                <h3 class="text-center text-info">Register</h3>
+                <div class="form-group">
+                  <label for="email" class="text-info">Email:</label><br>
+                  <input type="text" name="email" v-model="emailRegister"  id="register-email" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="firstName" class="text-info">First Name:</label><br>
+                  <input type="text" name="firstName" v-model="firstNameRegister"  id="register-firstName" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="lastName" class="text-info">Last Name:</label><br>
+                  <input type="text" name="lastName" v-model="lastNameRegister"  id="register-lastName" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="password" class="text-info">Password:</label><br>
+                  <input type="password" name="password" v-model="passwordRegister"  id="register-password" class="form-control">
+                </div>
+                <div class="text-right">
+                  <button type="submit" class="btn btn-primary" id="register-btn">Register</button>
+                </div>
+              </form>
             </div>
-            <a href="#" class="btn btn-primary" >Show Details</a> 
+          </div>
+          <div id="login-link" class="text-center mt-3">
+            <a href="#" @click="showLoginForm">Login here</a>
           </div>
         </div>
       </div>
-      <div class="col task-container completed">
-        <h4>🚀 Completed</h4>
-      </div>
-    </div>
+    </section>
   </div>
-  <!-- <section id="auth">
-    <div id="login-container">
-      <div class="container">
-        <div class="row justify-content-center align-items-center">
-          <div class="col-md-6 auth-box">
-            <form id="login-form" class="form auth-form" method="post">
-              <h3 class="text-center text-info">Login</h3>
-              <div class="form-group">
-                <label for="email" class="text-info">Email:</label><br>
-                <input type="text" name="email" id="email" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="password" class="text-info">Password:</label><br>
-                <input type="password" name="password" id="password" class="form-control">
-              </div>
-              <div class="text-right">
-                <div class="g-signin2" data-onsuccess="onSignIn"></div>
-                <button type="submit" class="btn btn-primary" id="login-btn">Login</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div id="register-link" class="text-center mt-3">
-          <a href="#" class="text-white">Register here</a>
-        </div>
-      </div>
-    </div>
-    <div id="register-container">
-      <div class="container">
-        <div class="row justify-content-center align-items-center">
-          <div class="col-md-6 auth-box">
-            <form id="register-form" class="form auth-form" method="post">
-              <h3 class="text-center text-info">Register</h3>
-              <div class="form-group">
-                <label for="email" class="text-info">Email:</label><br>
-                <input type="text" name="email" id="register-email" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="password" class="text-info">Password:</label><br>
-                <input type="password" name="password" id="register-password" class="form-control">
-              </div>
-              <div class="text-right">
-                <button type="submit" class="btn btn-primary" id="register-btn">Register</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div id="login-link" class="text-center mt-3">
-          <a href="#" class="text-white">Login here</a>
-        </div>
-      </div>
-    </div>
-  </section> -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="./assets/js/main.js"></script>
 </body>
 </html>
