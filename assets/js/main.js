@@ -43,10 +43,15 @@ const app = new Vue({
           this.checkAuth()
         })
         .catch(error => {
-          console.log(error.response)
           this.emailLogin = ''
           this.passwordLogin = ''
           this.checkAuth()
+          swal({
+            title: "Whoooops!",
+            text: error.response.data.message,
+            icon: "warning",
+            button: "Ok",
+          });
         })
     },
     handleRegister(){
@@ -70,6 +75,16 @@ const app = new Vue({
         .then(data => {
           this.emailLogin = this.emailRegister
           this.showLoginForm()
+          swal({
+            title: "Good job!",
+            text: "User registration successful! Please login.",
+            icon: "success",
+            button: "Ok",
+          });
+          this.emailRegister = ''
+          this.passwordRegister = ''
+          this.firstNameRegister = ''
+          this.lastNameRegister = ''
         })
         .catch(err => {
           this.emailRegister = ''
@@ -77,11 +92,31 @@ const app = new Vue({
           this.firstNameRegister = ''
           this.lastNameRegister = ''
           this.checkAuth()
+          let errors = err.response.data.errors.map(el => {
+            return el
+          })
+          swal({
+            title: "Whoooops!",
+            text: errors.join('\n'),
+            icon: "warning",
+            button: "Ok",
+          });
         })
     },
     handleLogout(){
-      localStorage.clear()
-      this.checkAuth()
+      swal({
+        title: "Logout",
+        text: "Are you sure want to logout?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+        .then((res) => {
+          if (res) {
+            localStorage.clear()
+            this.checkAuth()
+          } 
+        })
     },
     checkAuth(){
       if(localStorage.getItem('access_token')){
@@ -141,9 +176,23 @@ const app = new Vue({
         })
         .then(res => {
           this.checkAuth()
+          swal({
+            title: "Good job!",
+            text: "Your task has been added successfuly.",
+            icon: "success",
+            button: "Ok",
+          });
         })
         .catch(err => {
-          console.log(err.response)
+          let errors = err.response.data.errors.map(el => {
+            return el
+          })
+          swal({
+            title: "Whoooops!",
+            text: errors.join('\n'),
+            icon: "warning",
+            button: "Ok",
+          });
         })
     },
     editTaskById(id){
@@ -192,23 +241,39 @@ const app = new Vue({
         })
     },
     deleteTask(id){
-      $('#editTaskModal').modal('toggle')
-      axios({
-        url: `${this.baseUrl}/tasks/${id}`,
-        method: 'DELETE',
-        headers:{
-          access_token: localStorage.getItem('access_token')
-        }
+      swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this imaginary file!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
       })
-        .then(res => {
-          return res.data
-        })
-        .then(data => {
-          this.checkAuth()
-        })
-        .catch(err => {
-          console.log(err.response)
-        })
+      .then((res) => {
+        if (res) {
+          $('#editTaskModal').modal('toggle')
+          axios({
+            url: `${this.baseUrl}/tasks/${id}`,
+            method: 'DELETE',
+            headers:{
+              access_token: localStorage.getItem('access_token')
+            }
+          })
+            .then(res => {
+              return res.data
+            })
+            .then(data => {
+              this.checkAuth()
+              swal(data.message, {
+                icon: "success",
+              });
+            })
+            .catch(err => {
+              console.log(err.response)
+            })
+        }else{
+          $('#editTaskModal').modal('toggle')
+        }
+      });
     }
   },
   created(){
