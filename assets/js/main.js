@@ -143,7 +143,7 @@ const app = new Vue({
           this.checkAuth()
         })
         .catch(err => {
-          console.log(err)
+          console.log(err.response)
         })
     },
     editTaskById(id){
@@ -163,7 +163,7 @@ const app = new Vue({
           this.editDataId = data.id
         })
         .catch(err => {
-          console.log(err)
+          console.log(err.response)
         })
     },
     handleEditData(){
@@ -185,6 +185,25 @@ const app = new Vue({
           return res.data
         })
         .then(res => {
+          this.checkAuth()
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
+    },
+    deleteTask(id){
+      $('#editTaskModal').modal('toggle')
+      axios({
+        url: `${this.baseUrl}/tasks/${id}`,
+        method: 'DELETE',
+        headers:{
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+        .then(res => {
+          return res.data
+        })
+        .then(data => {
           this.checkAuth()
         })
         .catch(err => {
