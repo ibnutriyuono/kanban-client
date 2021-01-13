@@ -45,9 +45,11 @@ nav ul{
 }
 
 .auth-box {
-  margin-top: 120px;
-  border: 1px solid var(--cardBorder);
-  background-color: var(--cardBackground);
+  background-color: $backgroundPrimary;
+  #login-form{
+    margin-top: 50px;
+    border-radius: 20px;
+  }
 }
 
 .container{
