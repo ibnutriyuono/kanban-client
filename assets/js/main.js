@@ -2,7 +2,11 @@ const baseUrl = `http://localhost:3000`
 const app = new Vue({
   el: '#app',
   data: {
-    tasks: ['sadKEK', 'KEKL'],
+    tasks: [],
+    backlogTasks: [],
+    toDoTasks: [],
+    doneTasks: [],
+    completedTasks: [],
     emailLogin: '',
     passwordLogin: '',
     emailRegister: '',
@@ -63,6 +67,7 @@ const app = new Vue({
           return res.data
         })
         .then(data => {
+          this.emailLogin = this.emailRegister
           this.showLoginForm()
         })
         .catch(err => {
@@ -82,6 +87,7 @@ const app = new Vue({
         this.authShow = false
         this.mainShow = true
         this.loggedEmail = localStorage.getItem('email')
+        this.getTasks()
       }else{
         this.authShow = true
         this.mainShow = false
@@ -94,6 +100,40 @@ const app = new Vue({
     showRegisterForm(){
       this.registerFormShow = true
       this.loginFormShow = false
+    },
+    getTasks(){
+      axios({
+        method: 'GET',
+        url: `${baseUrl}/tasks`,
+        headers:{
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+        .then(res => {
+          return res.data
+        })
+        .then(data => {
+          this.tasks = []
+          this.backlogTasks = []
+          this.toDoTasks = []
+          this.completedTasks = []
+          this.doneTasks = []
+          data.forEach(el => {
+            if(el.category === 'Backlog'){
+              this.backlogTasks.push(el)
+            }else if(el.category === 'ToDo'){
+              this.toDoTasks.push(el)
+            }else if(el.category === 'Completed'){
+              this.completedTasks.push(el)
+            }else if(el.category === 'Done'){
+              this.doneTasks.push(el)
+            }
+          })
+          this.tasks = data
+        })
+        .catch(err => {
+          console.log(err.response)
+        })
     }
   },
   created(){
