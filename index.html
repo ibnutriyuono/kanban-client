@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta name="google-signin-client_id" content="492545537423-u7qvinekb1massbdduh5ka331t1q3aee.apps.googleusercontent.com">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="./assets/css/main.css">
-  <title>Kanban Tempate</title> 
+  <title>Mity's Kanban</title> 
 </head>
 <body>
   <div id="app">
@@ -109,7 +109,7 @@
                   <input type="password" v-model="passwordLogin" name="password" id="password" class="form-control">
                 </div>
                 <div class="text-right">
-                  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                  <div id="google-signin-button"></div>
                   <button type="submit" class="btn btn-primary" id="login-btn">Login</button>
                 </div>
               </form>
@@ -225,6 +225,7 @@
 
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

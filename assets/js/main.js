@@ -114,6 +114,10 @@ const app = new Vue({
         .then((res) => {
           if (res) {
             localStorage.clear()
+            const auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+              console.log('User signed out.');
+            });
             this.checkAuth()
           } 
         })
@@ -276,6 +280,28 @@ const app = new Vue({
           $('#editTaskModal').modal('toggle')
         }
       });
+    },
+    onSignIn(googleUser){
+      const id_token = googleUser.getAuthResponse().id_token;
+      axios({
+        url: `${this.baseUrl}/googleLogin`,
+        method: 'POST',
+        data:{
+          id_token
+        }
+      })
+        .then(res => {
+          return res.data
+        })
+        .then(data => {
+          console.log(data)
+          localStorage.setItem('access_token', data.access_token)
+          localStorage.setItem('email', data.userData.email)
+          this.checkAuth()
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
   created(){
@@ -294,5 +320,11 @@ const app = new Vue({
     doneTasks(){
       return this.tasks.filter(task => task.category === 'Done')
     }
-  }
+  },
+  mounted() {
+    gapi.signin2.render('google-signin-button', {
+      onsuccess: this.onSignIn,
+      onfailure: this.handleLogout
+    })
+  },
 })
