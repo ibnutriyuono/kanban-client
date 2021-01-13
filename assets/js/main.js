@@ -182,6 +182,8 @@ const app = new Vue({
             icon: "success",
             button: "Ok",
           });
+          this.addNewTitle = ''
+          this.addNewCategory = ''
         })
         .catch(err => {
           let errors = err.response.data.errors.map(el => {
