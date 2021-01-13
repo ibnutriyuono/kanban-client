@@ -15,7 +15,10 @@ const app = new Vue({
     registerFormShow: false,
     loginFormShow: true,
     addNewTitle: '',
-    addNewCategory: ''
+    addNewCategory: '',
+    editTitle: '',
+    editCategory: '',
+    editDataId: ''
   },
   methods:{
     handleLogin(){
@@ -141,6 +144,51 @@ const app = new Vue({
         })
         .catch(err => {
           console.log(err)
+        })
+    },
+    editTaskById(id){
+      axios({
+        url: `${this.baseUrl}/tasks/${id}`,
+        method: 'GET',
+        headers:{
+          access_token: localStorage.getItem('access_token')
+        }
+      })
+        .then(res => {
+          return res.data
+        })
+        .then(data => {
+          this.editTitle = data.title
+          this.editCategory = data.category
+          this.editDataId = data.id
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    handleEditData(){
+      $('#editTaskModal').modal('toggle')
+      let title = this.editTitle
+      let category = this.editCategory
+      axios({
+        url: `${this.baseUrl}/tasks/${this.editDataId}`,
+        method: 'PUT',
+        headers:{
+          access_token: localStorage.getItem('access_token')
+        },
+        data:{
+          title,
+          category
+        }
+      })
+        .then(res => {
+          return res.data
+        })
+        .then(res => {
+          this.checkAuth()
+        })
+        .catch(err => {
+          console.log(err.response)
         })
     }
   },
