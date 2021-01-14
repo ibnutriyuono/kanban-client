@@ -7,7 +7,7 @@
           <a href="#">soon mail</a>
         </li>
         <li>
-          <a href="#">Logout</a>
+          <a href="#" @click="handleLogout">Logout</a>
         </li>
       </ul>
     </nav>
@@ -17,6 +17,12 @@
 <script>
 export default {
   name: "Navbar",
+  props: ["isLoggedOut"],
+  methods: {
+    handleLogout() {
+      this.isLoggedOut();
+    },
+  },
 };
 </script>
 

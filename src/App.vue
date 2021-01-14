@@ -1,11 +1,11 @@
 <template>
   <div>
-    <navbar></navbar>
-    <!-- <auth-page
+    <navbar :isLoggedOut="isLoggedOut"></navbar>
+    <auth-page
       v-if="currentPage === 'auth'"
       :isLoggedIn="isLoggedIn"
     ></auth-page>
-    <main-page v-if="currentPage === 'main'"></main-page> -->
+    <main-page v-if="currentPage === 'main'"></main-page>
   </div>
 </template>
 
@@ -29,19 +29,21 @@ export default {
   },
   methods: {
     isLoggedIn(access_token) {
-      // console.log(access_token);
       this.currentPage = "main";
       localStorage.setItem("access_token", access_token);
     },
+    isLoggedOut() {
+      this.currentPage = "auth";
+      localStorage.clear();
+    },
   },
-  // created() {
-  //   console.log("called");
-  //   if (localStorage.getItem("access_token")) {
-  //     this.currentPage = "main";
-  //   } else {
-  //     this.currentPage = "auth";
-  //   }
-  // },
+  created() {
+    if (localStorage.getItem("access_token")) {
+      this.currentPage = "main";
+    } else {
+      this.currentPage = "auth";
+    }
+  },
 };
 </script>
 

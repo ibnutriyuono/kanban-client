@@ -16,6 +16,7 @@
                   type="text"
                   name="email"
                   id="email"
+                  v-model="email"
                   class="form-control"
                 />
               </div>
@@ -25,6 +26,7 @@
                   type="password"
                   name="password"
                   id="password"
+                  v-model="password"
                   class="form-control"
                 />
               </div>
@@ -56,11 +58,23 @@ export default {
   props: ["changePage", "isLoggedIn"],
   methods: {
     showRegisterForm() {
-      // this.changePage("register");
       this.changePage("register");
     },
     handleLogin() {
-      this.isLoggedIn("12314");
+      axios({
+        method: "POST",
+        url: `http://localhost:3000/login`,
+        data: {
+          email: this.email,
+          password: this.password,
+        },
+      })
+        .then((res) => {
+          this.isLoggedIn(res.data.access_token);
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
     },
   },
 };
