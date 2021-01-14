@@ -321,10 +321,5 @@ const app = new Vue({
       return this.tasks.filter(task => task.category === 'Done')
     }
   },
-  mounted() {
-    gapi.signin2.render('google-signin-button', {
-      onsuccess: this.onSignIn,
-      onfailure: this.handleLogout
-    })
-  },
+  
 })
