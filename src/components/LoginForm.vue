@@ -71,9 +71,13 @@ export default {
       })
         .then((res) => {
           this.isLoggedIn(res.data.access_token);
+          this.email = "";
+          this.password = "";
         })
         .catch((err) => {
           console.log(err.response);
+          this.email = "";
+          this.password = "";
         });
     },
   },
