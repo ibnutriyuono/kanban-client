@@ -4,7 +4,12 @@
       <div class="container">
         <div class="row justify-content-center align-items-center">
           <div class="col-md-6 auth-box">
-            <form id="register-form" class="form auth-form" method="post">
+            <form
+              id="register-form"
+              class="form auth-form"
+              method="post"
+              v-on:submit.prevent="handleRegister"
+            >
               <h3 class="text-center text-info">Register</h3>
               <div class="form-group">
                 <label for="email" class="text-info">Email:</label><br />
@@ -13,6 +18,7 @@
                   name="email"
                   id="register-email"
                   class="form-control"
+                  v-model="email"
                 />
               </div>
               <div class="form-group">
@@ -23,6 +29,7 @@
                   name="firstName"
                   id="register-firstName"
                   class="form-control"
+                  v-model="first_name"
                 />
               </div>
               <div class="form-group">
@@ -32,6 +39,7 @@
                   name="lastName"
                   id="register-lastName"
                   class="form-control"
+                  v-model="last_name"
                 />
               </div>
               <div class="form-group">
@@ -41,6 +49,7 @@
                   name="password"
                   id="register-password"
                   class="form-control"
+                  v-model="password"
                 />
               </div>
               <div class="text-right">
@@ -63,12 +72,43 @@
 export default {
   name: "RegisterForm",
   data() {
-    return {};
+    return {
+      email: "",
+      password: "",
+      first_name: "",
+      last_name: "",
+    };
   },
   props: ["changePage"],
   methods: {
     showLoginForm() {
       this.changePage("login");
+    },
+    handleRegister() {
+      axios({
+        method: "POST",
+        url: "http://localhost:3000/register",
+        data: {
+          email: this.email,
+          password: this.password,
+          first_name: this.first_name,
+          last_name: this.last_name,
+        },
+      })
+        .then((res) => {
+          this.changePage("login");
+          this.email = "";
+          this.password = "";
+          this.first_name = "";
+          this.last_name = "";
+        })
+        .catch((err) => {
+          console.log(err.response);
+          this.email = "";
+          this.password = "";
+          this.first_name = "";
+          this.last_name = "";
+        });
     },
   },
 };
