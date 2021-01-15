@@ -2,13 +2,13 @@
   <div>
     <div class="task-container backlog">
       <h4>{{ category }}</h4>
-      <div v-for="task in filterTasks" :key="task.id">
-        <task-card
-          :category="task.category"
-          :title="task.title"
-          :taskId="task.id"
-        ></task-card>
-      </div>
+      <task-card
+        v-for="task in filterTasks"
+        :key="task.id"
+        :task="task"
+        @deleteTask="deleteTask"
+        @updateTask="updateTask"
+      ></task-card>
     </div>
   </div>
 </template>
@@ -19,10 +19,20 @@ import TaskCard from "./TaskCard.vue";
 export default {
   name: "Category",
   data() {
-    return {};
+    return {
+      taskById: "",
+    };
   },
   components: { TaskCard },
   props: ["category", "tasks"],
+  methods: {
+    deleteTask(val) {
+      this.$emit("deleteTask", val);
+    },
+    updateTask(val) {
+      this.$emit("updateTask", val);
+    },
+  },
   computed: {
     filterTasks() {
       return this.tasks.filter((e) => e.category === this.category);

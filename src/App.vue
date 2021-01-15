@@ -14,6 +14,9 @@
       v-if="currentPage === 'main'"
       :tasks="tasks"
       :categories="categories"
+      @postData="handlePostTask"
+      @deleteTask="handleDeleteTask"
+      @updateTask="handleUpdateTask"
     ></main-page>
   </div>
 </template>
@@ -29,7 +32,7 @@ export default {
     return {
       baseUrl: "http://localhost:3000",
       currentPage: "auth",
-      categories: ["Backlog", "Todo", "Done", "Completed"],
+      categories: ["Backlog", "ToDo", "Done", "Completed"],
       tasks: [],
       userEmailData: "",
     };
@@ -63,7 +66,7 @@ export default {
     handleLogin(payload) {
       axios({
         method: "POST",
-        url: `http://localhost:3000/login`,
+        url: `${this.baseUrl}/login`,
         data: {
           email: payload.email,
           password: payload.password,
@@ -80,7 +83,7 @@ export default {
     handleRegister(payload) {
       axios({
         method: "POST",
-        url: "http://localhost:3000/register",
+        url: `${this.baseUrl}/register`,
         data: {
           email: payload.email,
           password: payload.password,
@@ -97,7 +100,7 @@ export default {
     },
     getAllTasks() {
       axios({
-        url: `http://localhost:3000/tasks`,
+        url: `${this.baseUrl}/tasks`,
         method: "GET",
         headers: {
           access_token: localStorage.getItem("access_token"),
@@ -105,6 +108,73 @@ export default {
       })
         .then((res) => {
           this.tasks = res.data;
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    handlePostTask(payload) {
+      axios({
+        url: `${this.baseUrl}/tasks`,
+        method: "POST",
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+        data: payload,
+      })
+        .then((res) => {
+          console.log(res.data);
+          this.checkAuth();
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    handleUpdateTask(payload) {
+      axios({
+        url: `${this.baseUrl}/tasks/${payload.id}`,
+        method: "PUT",
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+        data: {
+          title: payload.title,
+          category: payload.category,
+        },
+      })
+        .then((res) => {
+          console.log(res.data);
+          this.checkAuth();
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    handleDeleteTask(payload) {
+      console.log(payload);
+      swal({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this file!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+        .then((res) => {
+          if (res) {
+            return axios({
+              method: "DELETE",
+              url: `${this.baseUrl}/tasks/${payload}`,
+              headers: {
+                access_token: localStorage.getItem("access_token"),
+              },
+            });
+          }
+        })
+        .then((res) => {
+          this.checkAuth();
+          swal(res.data.message, {
+            icon: "success",
+          });
         })
         .catch((err) => {
           console.log(err.response);
