@@ -4,7 +4,7 @@
       <div class="card-body">
         <h5 class="card-title">{{ task.title }}</h5>
         <div class="card-text">
-          <p>{{ task.category }}</p>
+          <p>{{ task.Category.name }}</p>
         </div>
         <button
           type="button"
@@ -44,10 +44,13 @@
               <div class="form-group">
                 <label for="category">Category:</label><br />
                 <select v-model="editCategory" class="custom-select">
-                  <option value="Backlog">Backlog</option>
-                  <option value="ToDo">ToDo</option>
-                  <option value="Done">Done</option>
-                  <option value="Completed">Completed</option>
+                  <option
+                    v-for="category in categories"
+                    :key="category.id"
+                    :value="category.id"
+                  >
+                    {{ category.name }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -82,22 +85,23 @@ export default {
   data() {
     return {
       editTitle: this.task.title,
-      editCategory: this.task.category,
+      editCategory: this.task.Category.id,
       editTaskId: this.task.id,
       showModal: false,
     };
   },
-  props: ["task"],
+  props: ["task", "categories"],
   methods: {
     handleEditData() {
       let title = this.editTitle;
-      let category = this.editCategory;
+      let CategoryId = this.editCategory;
       let id = this.editTaskId;
       let data = {
         title,
-        category,
+        CategoryId,
         id,
       };
+      console.log(data);
       this.$emit("updateTask", data);
       this.showModal = false;
     },
