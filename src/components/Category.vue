@@ -2,11 +2,12 @@
   <div class="mt-3 mb-3">
     <div @dragover.prevent="" @drop="drop">
       <div class="task-container backlog">
-        <h4>{{ category }}</h4>
+        <h4>{{ category.name }}</h4>
         <task-card
           v-for="task in filterTasks"
           :key="task.id"
           :task="task"
+          :categories="categories"
           @deleteTask="deleteTask"
           @updateTask="updateTask"
         ></task-card>
@@ -26,7 +27,7 @@ export default {
     };
   },
   components: { TaskCard },
-  props: ["category", "tasks"],
+  props: ["category", "tasks", "categories"],
   methods: {
     drop(e) {
       const taskId = e.dataTransfer.getData("task_id");
@@ -44,7 +45,7 @@ export default {
   },
   computed: {
     filterTasks() {
-      return this.tasks.filter((e) => e.category === this.category);
+      return this.tasks.filter((e) => e.Category.name === this.category.name);
     },
   },
 };
