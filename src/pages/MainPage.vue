@@ -24,6 +24,7 @@
           <div v-for="(category, index) in categories" :key="index">
             <category
               :category="category"
+              :categories="categories"
               :tasks="tasks"
               @deleteTask="deleteTask"
               @updateTask="updateTask"
@@ -68,12 +69,14 @@
               </div>
               <div class="form-group">
                 <label for="category">Category:</label><br />
-                <!-- <input type="text" name="category" id="edit-category" class="form-control"> -->
                 <select v-model="addNewCategory" class="custom-select">
-                  <option value="Backlog">Backlog</option>
-                  <option value="ToDo">ToDo</option>
-                  <option value="Done">Done</option>
-                  <option value="Completed">Completed</option>
+                  <option
+                    v-for="category in categories"
+                    :key="category.id"
+                    :value="category.id"
+                  >
+                    {{ category.name }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -162,13 +165,15 @@ export default {
   methods: {
     addNewTask() {
       let title = this.addNewTitle;
-      let category = this.addNewCategory;
+      let CategoryId = this.addNewCategory;
       let data = {
         title,
-        category,
+        CategoryId,
       };
       this.$emit("postData", data);
       $("#addTaskModal").modal("toggle");
+      this.addNewTitle = "";
+      this.addNewCategory = "";
     },
     deleteTask(val) {
       this.$emit("deleteTask", val);
