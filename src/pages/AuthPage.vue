@@ -5,10 +5,12 @@
         v-if="currentPage === 'login'"
         :changePage="changePage"
         :isLoggedIn="isLoggedIn"
+        @loginData="handleLogin"
       ></login-form>
       <register-form
         v-if="currentPage === 'register'"
         :changePage="changePage"
+        @registerData="handleRegister"
       ></register-form>
     </section>
   </div>
@@ -32,6 +34,12 @@ export default {
   methods: {
     changePage(payload) {
       this.currentPage = payload;
+    },
+    handleLogin(value) {
+      this.$emit("loginData", value);
+    },
+    handleRegister(value) {
+      this.$emit("registerData", value);
     },
   },
 };
