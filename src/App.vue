@@ -35,7 +35,7 @@ export default {
     return {
       baseUrl: "http://localhost:3000",
       currentPage: "auth",
-      categories: ["Backlog", "ToDo", "Done", "Completed"],
+      categories: [],
       tasks: [],
       userEmailData: "",
     };
@@ -61,12 +61,12 @@ export default {
         dangerMode: true,
       }).then((res) => {
         if (res && status) {
+          localStorage.clear();
           this.currentPage = "auth";
           const auth2 = gapi.auth2.getAuthInstance();
           auth2.signOut().then(function () {
             console.log("User signed out.");
           });
-          localStorage.clear();
         }
       });
     },
@@ -74,6 +74,7 @@ export default {
       if (localStorage.getItem("access_token")) {
         this.currentPage = "main";
         this.getAllTasks();
+        this.getAllCategories();
       } else {
         this.currentPage = "auth";
       }
@@ -158,7 +159,6 @@ export default {
         data: payload,
       })
         .then((res) => {
-          console.log(res.data);
           this.checkAuth();
           swal({
             title: "Good job!",
@@ -180,7 +180,7 @@ export default {
         },
         data: {
           title: payload.title,
-          category: payload.category,
+          CategoryId: payload.CategoryId,
         },
       })
         .then((res) => {
@@ -241,7 +241,7 @@ export default {
     },
     handlePatchTask(payload) {
       const taskId = payload.taskId;
-      const category = payload.category;
+      const CategoryId = payload.category.id;
       axios({
         method: "PATCH",
         url: `${this.baseUrl}/tasks/${taskId}`,
@@ -249,7 +249,7 @@ export default {
           access_token: localStorage.getItem("access_token"),
         },
         data: {
-          category,
+          CategoryId,
         },
       })
         .then((res) => {
@@ -265,8 +265,44 @@ export default {
           console.log(err.response);
         });
     },
+    getAllCategories() {
+      axios({
+        url: `${this.baseUrl}/categories`,
+        method: "GET",
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+      })
+        .then((res) => {
+          this.categories = res.data;
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
     handlePostCategory(payload) {
-      this.categories.push(payload);
+      axios({
+        method: "POST",
+        url: `${this.baseUrl}/categories`,
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+        data: {
+          name: payload,
+        },
+      })
+        .then((res) => {
+          this.checkAuth();
+          swal({
+            title: "Good job!",
+            text: "Your category has been added successfuly.",
+            icon: "success",
+            button: "Ok",
+          });
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
     },
   },
   created() {
