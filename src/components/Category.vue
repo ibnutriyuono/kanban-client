@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-3 mb-3">
     <div @dragover.prevent="" @drop="drop">
       <div class="task-container backlog">
         <h4>{{ category }}</h4>
