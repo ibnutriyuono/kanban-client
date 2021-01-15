@@ -61,24 +61,11 @@ export default {
       this.changePage("register");
     },
     handleLogin() {
-      axios({
-        method: "POST",
-        url: `http://localhost:3000/login`,
-        data: {
-          email: this.email,
-          password: this.password,
-        },
-      })
-        .then((res) => {
-          this.isLoggedIn(res.data.access_token);
-          this.email = "";
-          this.password = "";
-        })
-        .catch((err) => {
-          console.log(err.response);
-          this.email = "";
-          this.password = "";
-        });
+      let data = {
+        email: this.email,
+        password: this.password,
+      };
+      this.$emit("loginData", data);
     },
   },
 };

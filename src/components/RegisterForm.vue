@@ -85,30 +85,13 @@ export default {
       this.changePage("login");
     },
     handleRegister() {
-      axios({
-        method: "POST",
-        url: "http://localhost:3000/register",
-        data: {
-          email: this.email,
-          password: this.password,
-          first_name: this.first_name,
-          last_name: this.last_name,
-        },
-      })
-        .then((res) => {
-          this.changePage("login");
-          this.email = "";
-          this.password = "";
-          this.first_name = "";
-          this.last_name = "";
-        })
-        .catch((err) => {
-          console.log(err.response);
-          this.email = "";
-          this.password = "";
-          this.first_name = "";
-          this.last_name = "";
-        });
+      let data = {
+        email: this.email,
+        password: this.password,
+        first_name: this.first_name,
+        last_name: this.last_name,
+      };
+      this.$emit("registerData", data);
     },
   },
 };
