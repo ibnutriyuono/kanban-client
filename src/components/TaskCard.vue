@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :id="task.id" draggable="true" @dragstart="drag">
     <div class="card mt-3" style="width: 12rem">
       <div class="card-body">
         <h5 class="card-title">{{ task.title }}</h5>
@@ -109,6 +109,10 @@ export default {
     },
     closeModal() {
       this.showModal = false;
+    },
+    drag(e) {
+      const { id } = e.target;
+      e.dataTransfer.setData("task_id", id);
     },
   },
 };

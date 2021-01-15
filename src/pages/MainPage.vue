@@ -19,6 +19,7 @@
               :tasks="tasks"
               @deleteTask="deleteTask"
               @updateTask="updateTask"
+              @patchTaskData="patchTaskData"
             ></category>
           </div>
         </div>
@@ -115,6 +116,9 @@ export default {
     },
     updateTask(val) {
       this.$emit("updateTask", val);
+    },
+    patchTaskData(val) {
+      this.$emit("patchTaskData", val);
     },
   },
 };

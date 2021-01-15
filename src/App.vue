@@ -9,6 +9,7 @@
       v-if="currentPage === 'auth'"
       @loginData="handleLogin"
       @registerData="handleRegister"
+      @googleToken="handleGoogleLogin"
     ></auth-page>
     <main-page
       v-if="currentPage === 'main'"
@@ -17,6 +18,7 @@
       @postData="handlePostTask"
       @deleteTask="handleDeleteTask"
       @updateTask="handleUpdateTask"
+      @patchTaskData="handlePatchTask"
     ></main-page>
   </div>
 </template>
@@ -59,6 +61,10 @@ export default {
       }).then((res) => {
         if (res && status) {
           this.currentPage = "auth";
+          const auth2 = gapi.auth2.getAuthInstance();
+          auth2.signOut().then(function () {
+            console.log("User signed out.");
+          });
           localStorage.clear();
         }
       });
@@ -209,6 +215,50 @@ export default {
           swal(res.data.message, {
             icon: "success",
           });
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    handleGoogleLogin(id_token) {
+      console.log("ALLO", id_token);
+      axios({
+        url: `${this.baseUrl}/googleLogin`,
+        method: "POST",
+        data: {
+          id_token,
+        },
+      })
+        .then((res) => {
+          localStorage.setItem("access_token", res.data.access_token);
+          localStorage.setItem("email", res.data.userData.email);
+          this.checkAuth();
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    handlePatchTask(payload) {
+      const taskId = payload.taskId;
+      const category = payload.category;
+      axios({
+        method: "PATCH",
+        url: `${this.baseUrl}/tasks/${taskId}`,
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+        data: {
+          category,
+        },
+      })
+        .then((res) => {
+          swal({
+            title: "Success",
+            text: res.data.message,
+            icon: "success",
+            button: "Ok",
+          });
+          this.checkAuth();
         })
         .catch((err) => {
           console.log(err.response);

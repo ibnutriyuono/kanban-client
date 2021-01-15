@@ -19,6 +19,7 @@
   "homepage": "https://github.com/ibnutriyuono/kanban-client#readme",
   "dependencies": {
     "vue": "^2.6.12",
+    "vue-google-login": "^2.0.5",
     "vue-hot-reload-api": "^2.3.4"
   },
   "devDependencies": {

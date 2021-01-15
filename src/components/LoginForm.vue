@@ -36,6 +36,13 @@
                 </button>
               </div>
             </form>
+            <div class="d-flex justify-content-end">
+              <GoogleLogin
+                :params="params"
+                :renderParams="renderParams"
+                :onSuccess="onSuccess"
+              ></GoogleLogin>
+            </div>
           </div>
         </div>
         <div id="register-link" class="text-center mt-3">
@@ -47,13 +54,23 @@
 </template>
 
 <script>
+import GoogleLogin from "vue-google-login";
+
 export default {
   name: "LoginForm",
   data() {
     return {
       email: "",
       password: "",
+      params: {
+        client_id:
+          "492545537423-u7qvinekb1massbdduh5ka331t1q3aee.apps.googleusercontent.com",
+      },
+      renderParams: {},
     };
+  },
+  components: {
+    GoogleLogin,
   },
   props: ["changePage", "isLoggedIn"],
   methods: {
@@ -68,6 +85,10 @@ export default {
       this.$emit("loginData", data);
       this.email = "";
       this.password = "";
+    },
+    onSuccess(googleUser) {
+      const { id_token } = googleUser.Bc;
+      this.$emit("googleToken", id_token);
     },
   },
 };

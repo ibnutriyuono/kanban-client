@@ -6,6 +6,7 @@
         :changePage="changePage"
         :isLoggedIn="isLoggedIn"
         @loginData="handleLogin"
+        @googleToken="googleToken"
       ></login-form>
       <register-form
         v-if="currentPage === 'register'"
@@ -40,6 +41,9 @@ export default {
     },
     handleRegister(value) {
       this.$emit("registerData", value);
+    },
+    googleToken(idToken) {
+      this.$emit("googleToken", idToken);
     },
   },
 };
