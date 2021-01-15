@@ -10,7 +10,11 @@
       @loginData="handleLogin"
       @registerData="handleRegister"
     ></auth-page>
-    <main-page v-if="currentPage === 'main'"></main-page>
+    <main-page
+      v-if="currentPage === 'main'"
+      :tasks="tasks"
+      :categories="categories"
+    ></main-page>
   </div>
 </template>
 
@@ -25,7 +29,7 @@ export default {
     return {
       baseUrl: "http://localhost:3000",
       currentPage: "auth",
-      categories: ["Backlog", "Todo", "Doing", "Done"],
+      categories: ["Backlog", "Todo", "Done", "Completed"],
       tasks: [],
       userEmailData: "",
     };
@@ -51,6 +55,7 @@ export default {
     checkAuth() {
       if (localStorage.getItem("access_token")) {
         this.currentPage = "main";
+        this.getAllTasks();
       } else {
         this.currentPage = "auth";
       }
@@ -85,6 +90,21 @@ export default {
       })
         .then((res) => {
           this.checkAuth();
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    },
+    getAllTasks() {
+      axios({
+        url: `http://localhost:3000/tasks`,
+        method: "GET",
+        headers: {
+          access_token: localStorage.getItem("access_token"),
+        },
+      })
+        .then((res) => {
+          this.tasks = res.data;
         })
         .catch((err) => {
           console.log(err.response);
