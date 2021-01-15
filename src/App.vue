@@ -50,10 +50,18 @@ export default {
       localStorage.setItem("email", email);
     },
     isLoggedOut(status) {
-      if (status) {
-        this.currentPage = "auth";
-        localStorage.clear();
-      }
+      swal({
+        title: "Logout",
+        text: "Are you sure want to logout?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((res) => {
+        if (res && status) {
+          this.currentPage = "auth";
+          localStorage.clear();
+        }
+      });
     },
     checkAuth() {
       if (localStorage.getItem("access_token")) {
@@ -77,7 +85,12 @@ export default {
           this.checkAuth();
         })
         .catch((err) => {
-          console.log(err.response);
+          swal({
+            title: "Whoooops!",
+            text: err.response.data.message,
+            icon: "warning",
+            button: "Ok",
+          });
         });
     },
     handleRegister(payload) {
@@ -93,9 +106,24 @@ export default {
       })
         .then((res) => {
           this.checkAuth();
+          swal({
+            title: "Good job!",
+            text: "User registration successful! Please login.",
+            icon: "success",
+            button: "Ok",
+          });
         })
         .catch((err) => {
           console.log(err.response);
+          let errors = err.response.data.errors.map((el) => {
+            return el;
+          });
+          swal({
+            title: "Whoooops!",
+            text: errors.join("\n"),
+            icon: "warning",
+            button: "Ok",
+          });
         });
     },
     getAllTasks() {
@@ -125,6 +153,12 @@ export default {
         .then((res) => {
           console.log(res.data);
           this.checkAuth();
+          swal({
+            title: "Good job!",
+            text: "Your task has been added successfuly.",
+            icon: "success",
+            button: "Ok",
+          });
         })
         .catch((err) => {
           console.log(err.response);

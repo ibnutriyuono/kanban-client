@@ -66,6 +66,8 @@ export default {
         password: this.password,
       };
       this.$emit("loginData", data);
+      this.email = "";
+      this.password = "";
     },
   },
 };

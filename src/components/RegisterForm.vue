@@ -92,6 +92,10 @@ export default {
         last_name: this.last_name,
       };
       this.$emit("registerData", data);
+      this.email = "";
+      this.password = "";
+      this.first_name = "";
+      this.last_name = "";
     },
   },
 };
