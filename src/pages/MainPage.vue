@@ -5,11 +5,19 @@
         <div class="row mb-3">
           <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-primary mr-3"
             data-toggle="modal"
             data-target="#addTaskModal"
           >
             Add New Task
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target="#addCategoryModal"
+          >
+            Add New Category
           </button>
         </div>
         <div class="row">
@@ -83,6 +91,56 @@
         </div>
       </div>
     </div>
+    <div
+      class="modal fade"
+      id="addCategoryModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="addCategoryModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addCategoryModalLabel">
+              Add new category
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form method="POST" v-on:submit.prevent="handleAddNewCategory">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="category">Category Name:</label><br />
+                <input
+                  type="text"
+                  name="category"
+                  v-model="categoryName"
+                  id="add-category"
+                  class="form-control"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Add Task</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -94,6 +152,7 @@ export default {
     return {
       addNewTitle: "",
       addNewCategory: "",
+      categoryName: "",
     };
   },
   props: ["tasks", "categories"],
@@ -119,6 +178,11 @@ export default {
     },
     patchTaskData(val) {
       this.$emit("patchTaskData", val);
+    },
+    handleAddNewCategory() {
+      $("#addCategoryModal").modal("toggle");
+      this.$emit("categoryName", this.categoryName);
+      this.categoryName = "";
     },
   },
 };

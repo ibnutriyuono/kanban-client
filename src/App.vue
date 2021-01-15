@@ -19,6 +19,7 @@
       @deleteTask="handleDeleteTask"
       @updateTask="handleUpdateTask"
       @patchTaskData="handlePatchTask"
+      @categoryName="handlePostCategory"
     ></main-page>
   </div>
 </template>
@@ -263,6 +264,9 @@ export default {
         .catch((err) => {
           console.log(err.response);
         });
+    },
+    handlePostCategory(payload) {
+      this.categories.push(payload);
     },
   },
   created() {
