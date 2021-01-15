@@ -22,9 +22,11 @@
 export default {
   name: "Navbar",
   data() {
-    return {};
+    return {
+      userData: localStorage.getItem("email"),
+    };
   },
-  props: ["currentPage", "userData"],
+  props: ["currentPage"],
   methods: {
     handleLogout() {
       this.$emit("isLoggedOut", true);

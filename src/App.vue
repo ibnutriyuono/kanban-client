@@ -1,10 +1,6 @@
 <template>
   <div>
-    <navbar
-      @isLoggedOut="isLoggedOut"
-      :currentPage="currentPage"
-      :userData="userEmailData"
-    ></navbar>
+    <navbar @isLoggedOut="isLoggedOut" :currentPage="currentPage"></navbar>
     <auth-page
       v-if="currentPage === 'auth'"
       @loginData="handleLogin"
@@ -33,11 +29,10 @@ export default {
   name: "App",
   data() {
     return {
-      baseUrl: "http://localhost:3000",
+      baseUrl: "https://whispering-chamber-66210.herokuapp.com",
       currentPage: "auth",
       categories: [],
       tasks: [],
-      userEmailData: "",
     };
   },
   components: {
@@ -48,7 +43,6 @@ export default {
   methods: {
     isLoggedIn(access_token, email) {
       this.currentPage = "main";
-      this.userEmailData = email;
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("email", email);
     },
@@ -60,7 +54,7 @@ export default {
         buttons: true,
         dangerMode: true,
       }).then((res) => {
-        if (res && status) {
+        if (res || status) {
           localStorage.clear();
           this.currentPage = "auth";
           const auth2 = gapi.auth2.getAuthInstance();
