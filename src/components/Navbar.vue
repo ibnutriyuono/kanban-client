@@ -4,10 +4,14 @@
       <ul>
         <li><a href="#">Kanban</a></li>
         <li>
-          <a href="#">soon mail</a>
+          <div>
+            <a href="#" v-if="currentPage === 'main'">{{ userData }}</a>
+          </div>
         </li>
         <li>
-          <a href="#" @click="handleLogout">Logout</a>
+          <a href="#" v-if="currentPage === 'main'" @click="handleLogout"
+            >Logout</a
+          >
         </li>
       </ul>
     </nav>
@@ -17,10 +21,13 @@
 <script>
 export default {
   name: "Navbar",
-  props: ["isLoggedOut"],
+  data() {
+    return {};
+  },
+  props: ["currentPage", "userData"],
   methods: {
     handleLogout() {
-      this.isLoggedOut();
+      this.$emit("isLoggedOut", true);
     },
   },
 };
